@@ -2,6 +2,8 @@
   "name": "my-drive",
   "private": true,
   "scripts": {
+    "install:backend": "pnpm --filter backend install",
+    "install:frontend": "pnpm --filter frontend install",
     "dev:backend": "pnpm --filter backend dev",
     "dev:frontend": "pnpm --filter frontend dev",
     "db:generate": "pnpm --filter backend db:generate",
@@ -13,7 +15,8 @@
     "start:backend": "pnpm --filter backend start",
     "start:frontend": "pnpm --filter frontend preview",
     "build": "pnpm run /^build:/",
-    "start": "pnpm run /^start:/"
+    "start": "pnpm run /^start:/",
+    "install": "pnpm run /^install:/"
   },
   "dependencies": {
     "elysia": "^1.4.21"

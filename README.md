@@ -1,4 +1,4 @@
-# Conclusion Project Explorer - README
+# Project Explorer
 
 ## Project Overview
 This project is a monorepo application using **Bun**, **Elysia.js**, and **Vue 3**. It serves as a file explorer application.
