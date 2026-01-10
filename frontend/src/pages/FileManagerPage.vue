@@ -18,7 +18,7 @@ const handleLoadChildren = async (file: File) => {
     if (file.isLoaded || file.isLoading) return
     file.isLoading = true
     // hit endpoint get children files
-    const { data, error } = await client.v1.resources.files({ id: file.id }).get()
+    const { data, error } = await client.v1.resources({ id: file.id }).files.get()
 
     if (!error && data) {
         file.children = data.data as File[]

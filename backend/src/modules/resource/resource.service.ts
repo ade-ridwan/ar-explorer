@@ -14,8 +14,7 @@ export const resourceService = {
 
         });
     },
-    getResourceById: async (parentId: string) => {
-
+    getChildrenResources: async (parentId: string) => {
         const result = await db.select({
             id: files.id,
             name: files.name,

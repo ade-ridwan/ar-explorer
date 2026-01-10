@@ -9,8 +9,9 @@ const app = new Elysia()
   .use(v1Routes)
   .listen(process.env.PORT || 3000)
 
-export type App = typeof app
-
 console.log(
   `Backend is running at ${app.server?.hostname}:${app.server?.port}`
 );
+
+export type App = typeof app
+
