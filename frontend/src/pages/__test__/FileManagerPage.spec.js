@@ -3,14 +3,27 @@ import FileManagerPage from "../FileManagerPage.vue";
 import { expect, test, describe } from "vitest";
 
 describe("FileManagerPage", () => {
-  test('increments count when button is clicked', async () => {
-    // Mount the component
+  test('renders the component properly', () => {
     const wrapper = mount(FileManagerPage);
+    expect(wrapper.exists()).toBe(true);
+  });
 
-    // Find the folder tree title
-    const folderTreeTitle = wrapper.find('#folder-tree-title');
+  test('displays the correctly title', () => {
+    const wrapper = mount(FileManagerPage);
+    const title = wrapper.find('#folder-tree-title');
+    expect(title.exists()).toBe(true);
+    expect(title.text()).toBe('Navigasi Folder');
+  });
 
-    // Assert the text content
-    expect(folderTreeTitle.text()).toBe('Navigasi Folder');
+  test('renders file list area', () => {
+    const wrapper = mount(FileManagerPage);
+    const fileList = wrapper.find('.file-list');
+    expect(fileList.exists()).toBe(true);
+  });
+  
+  test('renders at least one file item (stub check)', () => {
+      const wrapper = mount(FileManagerPage);
+      const fileItems = wrapper.findAll('[data-testid="file-item"]');
+      expect(fileItems.length).toBeGreaterThan(0);
   });
 });
