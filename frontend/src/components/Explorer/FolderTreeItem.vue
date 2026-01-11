@@ -29,11 +29,9 @@ const toggle = async () => {
       'flex items-center gap-2 px-2 py-1 cursor-pointer rounded text-sm transition-colors',
       selectedId === file.id ? 'bg-blue-100 text-black font-medium' : 'hover:bg-slate-200 text-slate-700'
     ]">
-      <span class="w-2 text-[10px] text-center">
-        <span v-if="file.hasChildren || file.children?.length">
-          <ChevronDownIcon class="w-3 h-3 text-gray-500" v-if="isOpen" />
-          <ChevronRightIcon class="w-3 h-3 text-gray-500" v-else />
-        </span>
+      <span class="w-2 text-[10px] text-center" v-if="file.hasChildren">
+        <ChevronDownIcon class="w-3 h-3 text-gray-500" v-if="isOpen" />
+        <ChevronRightIcon class="w-3 h-3 text-gray-500" v-else />
       </span>
       <FolderIcon class="w-4 h-4 fill-yellow-500 text-yellow-500 opacity-80" />
       <span class="truncate">{{ file.name }}</span>

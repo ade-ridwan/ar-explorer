@@ -17,13 +17,13 @@ const iconMap: Record<string, LucideIcon> = {
 const colorMap: Record<string, string> = {
     folder: 'text-yellow-500 fill-yellow-50',
     file: 'text-blue-300 fill-blue-50',
-    jpg: 'text-blue-300 fill-blue-50',
-    png: 'text-blue-300 fill-blue-50',
-    html: 'text-blue-300 fill-blue-50',
-    pdf: 'text-red-400 fill-red-50',
-    wav: 'text-red-400 fill-red-50',
-    mp3: 'text-red-400 fill-red-50',
-    css: 'text-blue-300 fill-blue-50',
+    // jpg: 'text-blue-300 fill-blue-50',
+    // png: 'text-blue-300 fill-blue-50',
+    // html: 'text-blue-300 fill-blue-50',
+    // pdf: 'text-red-400 fill-red-50',
+    // wav: 'text-red-400 fill-red-50',
+    // mp3: 'text-red-400 fill-red-50',
+    // css: 'text-blue-300 fill-blue-50',
 }
 
 const getIcon = (extension: string) => {

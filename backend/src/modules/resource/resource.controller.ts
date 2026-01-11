@@ -16,22 +16,10 @@ export const resourceController = new Elysia({ prefix: '/resources' })
     }, {
         params: t.Object({ id: t.String() })
     })
-    .get('/:id/parent', async ({ params }) => {
-        const data = await resourceService.getParentResource(params.id);
-        return { status: 'success', data: data };
-    }, {
-        params: t.Object({ id: t.String() })
-    })
     .get('/search', async ({ query: { q } }) => {
         if (!q || q.length < 2) return { data: [] }; // Minimal 2 karakter
-        const results = await resourceService.search(q);
+        const results = await resourceService.getSearch(q);
         return { status: 'success', data: results };
     }, {
         query: t.Object({ q: t.String() })
-    })
-    .get('/:id/ancestors', async ({ params }) => {
-        const data = await resourceService.getAncestors(params.id);
-        return { status: 'success', data: data };
-    }, {
-        params: t.Object({ id: t.String() })
     })
