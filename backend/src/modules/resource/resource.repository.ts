@@ -48,17 +48,4 @@ export const resourceRepository = {
             limit: 10
         })
     },
-    getAncestors: async (folderId: string) => {
-        const result = await db.execute(sql`
-            WITH RECURSIVE folder_path AS (
-                SELECT id, name, parent_id FROM files WHERE id = ${folderId}
-                UNION ALL
-                SELECT f.id, f.name, f.parent_id
-                FROM files f
-                JOIN folder_path fp ON f.id = fp.parent_id
-            )
-            SELECT * FROM folder_path;
-            `);
-        return result;
-    }
 }
