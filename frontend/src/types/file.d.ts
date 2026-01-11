@@ -9,8 +9,10 @@ export interface File {
         extension: string;
     };
     children?: File[];
+    parent?: File;
     parentId?: string;
     isLoaded?: boolean;
+    isOpen?: boolean;
     isLoading?: boolean;
     hasChildren?: boolean;
     createdAt?: Date;

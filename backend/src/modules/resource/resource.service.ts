@@ -1,10 +1,10 @@
-import { isNull } from "drizzle-orm";
+import { ilike, isNull } from "drizzle-orm";
 import { db } from "../../db";
 import { sql } from "drizzle-orm";
 import { eq } from "drizzle-orm";
 import { files } from "../../db/schema";
 export const resourceService = {
-    getAllResources: async () => {
+    getRootResources: async () => {
         return await db.query.files.findMany({
             where: (files, { eq }) => eq(files.type, 'folder') && isNull(files.parentId),
             with: {
@@ -22,7 +22,6 @@ export const resourceService = {
             type: files.type,
             url: files.url,
             metadata: files.metadata,
-            // Logika: Jika hitungan subquery > 0, maka true
             hasChildren: sql<boolean>`
                 EXISTS(SELECT 1 FROM ${files} AS f 
                 WHERE f.parent_id = ${files}.${files.id}
@@ -33,14 +32,33 @@ export const resourceService = {
 
         return result;
     },
-    getResourcesByFolderName: async (folderName: string) => {
-
-        return await db.query.files.findFirst({
-            where: (files, { eq }) => isNull(files.parentId),
+    search: async (keyword: string) => {
+        return await db.query.files.findMany({
+            columns: {
+                id: true,
+                name: true,
+                parentId: true,
+                type: true,
+                metadata: true,
+            },
+            where: (files, { ilike }) => ilike(files.name, `%${keyword}%`),
             with: {
-                children: true
-            }
-        });
+                parent: true
+            },
+            limit: 10
+        })
     },
-
+    getAncestors: async (folderId: string) => {
+        const result = await db.execute(sql`
+            WITH RECURSIVE folder_path AS (
+                SELECT id, name, parent_id FROM files WHERE id = ${folderId}
+                UNION ALL
+                SELECT f.id, f.name, f.parent_id
+                FROM files f
+                JOIN folder_path fp ON f.id = fp.parent_id
+            )
+            SELECT * FROM folder_path;
+            `);
+        return result;
+    }
 }

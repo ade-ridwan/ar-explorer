@@ -5,7 +5,8 @@ import FolderContent from '../components/Explorer/FolderContent.vue'
 import type { File } from '../types/file'
 import { client } from '../utils/api'
 import { findPathFunc } from '../utils/explorer-logic'
-import { FolderIcon } from 'lucide-vue-next'
+import { FolderIcon, SearchIcon } from 'lucide-vue-next'
+import SearchBar from '../components/Explorer/SearchBar.vue'
 
 const rootFolders = ref<File[]>([])
 const selectedFolder = ref<File | null>(null)
@@ -17,8 +18,10 @@ const activePath = computed(() => {
 const handleLoadChildren = async (file: File) => {
     if (file.isLoaded || file.isLoading) return
     file.isLoading = true
+    let id: string = file.type === 'file' ? (file?.parentId || '') : file.id
+    
     // hit endpoint get children files
-    const { data, error } = await client.v1.resources({ id: file.id }).files.get()
+    const { data, error } = await client.v1.resources({ id: id }).children.get()
 
     if (!error && data) {
         file.children = data.data as File[]
@@ -40,7 +43,7 @@ const fetchRootFolders = async () => {
     rootFolders.value = data.data as File[]
     selectedFolder.value = null;
     selectedFolder.value = {
-        name: 'root',
+        name: 'Root',
         type: 'folder',
         id: 'root',
         children: rootFolders.value,
@@ -70,8 +73,8 @@ onMounted(async () => {
         </aside>
 
         <section class="flex-1 flex flex-col bg-white">
-            <header class="h-16 border-bottom justify-between border-slate-100 bg-white flex items-center px-6 shadow-sm z-10">
-                <div class="flex w-1/2 overflow-hidden items-center bg-gray-100 py-1 rounded-lg">
+            <header class="h-16 gap-4 border-bottom justify-between border-slate-100 bg-white flex items-center px-4 shadow-sm z-10">
+                <div class="flex flex-1 border h-9 border-slate-200 px-1 overflow-hidden items-center bg-gray-100 py-1 rounded-lg">
                     <div class="flex items-center hover:bg-gray-200 py-1 px-2 rounded cursor-pointer transition-colors"
                         @click="fetchRootFolders">
                         <FolderIcon class="w-4 h-4 mr-2 text-yellow-400" />
@@ -82,18 +85,15 @@ onMounted(async () => {
                         <span @click="handleSelect(folder)" :class="[
                             'px-2 py-1 rounded cursor-pointer line-clamp-1 transition-colors',
                             index === activePath.length - 1
-                                ? ' text-gray-700 rounded-full text-sm font-semibold'
+                                ? ' text-gray-700 rounded-full text-sm'
                                 : 'hover:bg-gray-200 text-gray-600 text-sm'
                         ]">
                             {{ folder.name }}
                         </span>
                     </div>
                 </div>
-                <div class="w-1/2 px-4">
-                    <div>
-                        <input type="text" placeholder="Cari file..."
-                            class="w-full p-2 text-xs rounded-lg border border-slate-300">
-                    </div>
+                <div class="w-1/3">
+                    <SearchBar @select-result="handleSelect" />
                 </div>
             </header>
             <FolderContent :activeFolder="selectedFolder" @open="handleSelect" />

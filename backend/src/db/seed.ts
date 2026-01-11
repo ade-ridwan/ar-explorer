@@ -2,16 +2,15 @@ import { db } from ".";
 import { files } from "./schema";
 
 async function seed() {
-  console.log("🌱 Memulai proses seeding...");
+  console.log("Start seeding...");
 
   try {
-    // 1. Bersihkan data lama (Opsional - Hati-hati di produksi!)
-    // Karena ada cascade delete, menghapus folder root akan menghapus semuanya
+    // clear all data
     await db.delete(files);
-    console.log("🧹 Database dibersihkan.");
+    console.log("Database cleared.");
 
-    // 2. Buat Folder Root
-    console.log("📂 Membuat folder root...");
+    // create Root folders
+    console.log("Creating root folders...");
     const [docsFolder] = await db.insert(files).values({
       name: "Documents",
       parentId: null,
@@ -30,8 +29,22 @@ async function seed() {
       type: "folder",
     }).returning();
 
-    // 3. Buat Sub-folder di dalam Documents
-    console.log("📁 Membuat sub-folder...");
+    const [videosFolder] = await db.insert(files).values({
+      name: "Videos",
+      parentId: null,
+      type: "folder",
+    }).returning();
+
+    const [downloadsFolder] = await db.insert(files).values({
+      name: "Downloads",
+      parentId: null,
+      type: "folder",
+    }).returning();
+
+    // create sub-folders
+    console.log("Creating sub-folders...");
+
+    // Documents sub-folders
     const [projectsFolder] = await db.insert(files).values({
       name: "Projects",
       parentId: docsFolder.id,
@@ -44,54 +57,203 @@ async function seed() {
       type: "folder",
     }).returning();
 
-    // 4. Buat Nested Folder (Folder di dalam Folder)
+    // Music sub-folders
+    const [rockFolder] = await db.insert(files).values({
+      name: "Rock",
+      parentId: musicFolder.id,
+      type: "folder",
+    }).returning();
+
+    const [popFolder] = await db.insert(files).values({
+      name: "Pop",
+      parentId: musicFolder.id,
+      type: "folder",
+    }).returning();
+
+    // Pictures sub-folders
+    const [vacationFolder] = await db.insert(files).values({
+      name: "Vacation 2023",
+      parentId: picsFolder.id,
+      type: "folder",
+    }).returning();
+
+    const [screenshotsFolder] = await db.insert(files).values({
+      name: "Screenshots",
+      parentId: picsFolder.id,
+      type: "folder",
+    }).returning();
+
+    // Projects sub-folders
     const [webDesignFolder] = await db.insert(files).values({
       name: "Web Design",
       parentId: projectsFolder.id,
       type: "folder",
     }).returning();
+    
+    const [backendFolder] = await db.insert(files).values({
+      name: "Backend API",
+      parentId: projectsFolder.id,
+      type: "folder",
+    }).returning();
 
-    // 5. Buat File di dalam Folder tertentu
-    console.log("📄 Membuat file...");
+    // create files
+    console.log("Creating files...");
     await db.insert(files).values([
+      // Web Design files
       {
         name: "index.html",
         url: "https://storage.com/files/index.html",
         type: "file",
         metadata: {
-            size: 1024,
-            mime_type: "text/html",
-            extension: "html",
+          size: 1024,
+          mime_type: "text/html",
+          extension: "html",
         },
         parentId: webDesignFolder.id,
       },
       {
-        name: "Sekolah.pdf",
-        url: "https://storage.com/files/Sekolah.pdf",
+        name: "style.css",
+        url: "https://storage.com/files/style.css",
         type: "file",
         metadata: {
-            size: 2048,
-            mime_type: "application/pdf",
-            extension: "pdf",
+          size: 512,
+          mime_type: "text/css",
+          extension: "css",
+        },
+        parentId: webDesignFolder.id,
+      },
+      // Backend files
+      {
+        name: "server.ts",
+        url: "https://storage.com/files/server.ts",
+        type: "file",
+        metadata: {
+          size: 2048,
+          mime_type: "application/typescript",
+          extension: "ts",
+        },
+        parentId: backendFolder.id,
+      },
+      // Documents files
+      {
+        name: "Resume.pdf",
+        url: "https://storage.com/files/Resume.pdf",
+        type: "file",
+        metadata: {
+          size: 10240,
+          mime_type: "application/pdf",
+          extension: "pdf",
         },
         parentId: docsFolder.id,
       },
       {
-        name: "Gambar Ikan.jpg",
-        url: "https://storage.com/files/Gambar Ikan.jpg",
+        name: "Notes.txt",
+        url: "https://storage.com/files/Notes.txt",
         type: "file",
         metadata: {
-            size: 2048,
-            mime_type: "image/jpeg",
-            extension: "jpg",
+          size: 128,
+          mime_type: "text/plain",
+          extension: "txt",
         },
-        parentId: picsFolder.id,
+        parentId: docsFolder.id,
+      },
+      // Picture files
+      {
+        name: "Beach.jpg",
+        url: "https://storage.com/files/Beach.jpg",
+        type: "file",
+        metadata: {
+          size: 2048000,
+          mime_type: "image/jpeg",
+          extension: "jpg",
+        },
+        parentId: vacationFolder.id,
+      },
+      {
+        name: "Mountain.png",
+        url: "https://storage.com/files/Mountain.png",
+        type: "file",
+        metadata: {
+          size: 3048000,
+          mime_type: "image/png",
+          extension: "png",
+        },
+        parentId: vacationFolder.id,
+      },
+      {
+        name: "App.png",
+        url: "https://storage.com/files/App.png",
+        type: "file",
+        metadata: {
+          size: 548000,
+          mime_type: "image/png",
+          extension: "png",
+        },
+        parentId: screenshotsFolder.id,
+      },
+      // Music files
+      {
+        name: "Bohemian Rhapsody.mp3",
+        url: "https://storage.com/files/Bohemian Rhapsody.mp3",
+        type: "file",
+        metadata: {
+          size: 8048000,
+          mime_type: "audio/mpeg",
+          extension: "mp3",
+        },
+        parentId: rockFolder.id,
+      },
+      {
+        name: "Shape of You.mp3",
+        url: "https://storage.com/files/Shape of You.mp3",
+        type: "file",
+        metadata: {
+          size: 7048000,
+          mime_type: "audio/mpeg",
+          extension: "mp3",
+        },
+        parentId: popFolder.id,
+      },
+      // Video files
+      {
+        name: "Tutorial.mp4",
+        url: "https://storage.com/files/Tutorial.mp4",
+        type: "file",
+        metadata: {
+          size: 150048000,
+          mime_type: "video/mp4",
+          extension: "mp4",
+        },
+        parentId: videosFolder.id,
+      },
+      // Download files
+      {
+        name: "installer.dmg",
+        url: "https://storage.com/files/installer.dmg",
+        type: "file",
+        metadata: {
+          size: 100048000,
+          mime_type: "application/x-apple-diskimage",
+          extension: "dmg",
+        },
+        parentId: downloadsFolder.id,
+      },
+      {
+        name: "archive.zip",
+        url: "https://storage.com/files/archive.zip",
+        type: "file",
+        metadata: {
+          size: 5048000,
+          mime_type: "application/zip",
+          extension: "zip",
+        },
+        parentId: downloadsFolder.id,
       },
     ]);
 
-    console.log("✅ Seeding selesai dengan sukses!");
+    console.log("Seeding completed");
   } catch (error) {
-    console.error("❌ Gagal melakukan seeding:", error);
+    console.error("failed to seed:", error);
   } finally {
     process.exit();
   }
