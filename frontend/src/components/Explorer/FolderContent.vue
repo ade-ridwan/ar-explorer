@@ -53,7 +53,7 @@ const emit = defineEmits(['open', 'load-children'])
                     </div>
                 </div>
 
-                <div v-if="!props.activeFolder?.children?.length"
+                <div id="empty-folder" v-if="!props.activeFolder?.children?.length"
                     class="col-span-full text-center mt-20 text-slate-400">
                     <FolderOpenIcon class="w-14 h-14 mb-2 mx-auto" />
                     <p>Folder ini kosong</p>

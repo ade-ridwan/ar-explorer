@@ -6,7 +6,7 @@ export const resourceService = {
         if (!folder) throw new Error('Folder not found')
         return folder.map((folder) => ({
             ...folder,
-            hasChildren: folder.children?.length > 0
+            hasChildren: folder.children.filter((child) => child.type === 'folder')?.length > 0
         }))
     },
 
