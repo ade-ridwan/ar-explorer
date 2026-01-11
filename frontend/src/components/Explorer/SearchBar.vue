@@ -53,7 +53,7 @@ const selectItem = (item: File) => {
         <ul v-if="showDropdown"
             class="absolute w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-xl z-50 max-h-60 overflow-y-auto">
             <li v-for="item in suggestions" :key="item.id" @click="selectItem(item)"
-                class="px-4 py-3 hover:bg-blue-50 cursor-pointer flex items-center gap-3 border-b last:border-0">
+                class="px-4 py-3 hover:bg-blue-50 cursor-pointer flex items-center gap-3 border-b border-gray-300 last:border-0">
                 <component :is="getIcon(item.metadata?.extension || 'folder')"
                     :class="'w-6 h-6 ' + getColor(item.metadata?.extension || 'folder')" />
                 <div class="flex flex-col">
