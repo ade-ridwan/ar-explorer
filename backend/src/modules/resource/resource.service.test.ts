@@ -26,9 +26,9 @@ describe('Resource Controller', () => {
     })
   })
 
-  it('[GET] v1/resources/:id/files should response status 200', async () => {
+  it('[GET] v1/resources/:id/children should response status 200', async () => {
     const response = await app.handle(
-      new Request('http://localhost/v1/resources/123/files')
+      new Request('http://localhost/v1/resources/123/children')
     );
 
     expect(response.status).toBe(200)
@@ -40,9 +40,27 @@ describe('Resource Controller', () => {
     expect(body.data[0].name).toBe('Sub Folder A')
   });
 
-  it('[GET] v1/resources/:id/files - send the response as JSON', async () => {
+  it('[GET] v1/resources/:id/children - send the response as JSON', async () => {
     const response = await app.handle(
-      new Request('http://localhost/v1/resources/123/files')
+      new Request('http://localhost/v1/resources/123/children')
+    )
+
+    // expect the response to be JSON
+    expect(response.headers.get('content-type')).toContain('application/json')
+  })
+
+  // test seach
+  it('[GET] v1/resources/search should response status 200', async () => {
+    const response = await app.handle(
+      new Request('http://localhost/v1/resources/search?q=web')
+    );
+
+    expect(response.status).toBe(200)
+  });
+
+  it('[GET] v1/resources/search - send the response as JSON', async () => {
+    const response = await app.handle(
+      new Request('http://localhost/v1/resources/search?q=web')
     )
 
     // expect the response to be JSON

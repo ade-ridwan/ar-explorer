@@ -16,7 +16,7 @@ export const resourceService = {
         return folder
     },
 
-    async getSearch(keyword: string) {
+    async getSearchByName(keyword: string) {
         return await resourceRepository.search(keyword)
     }
 }

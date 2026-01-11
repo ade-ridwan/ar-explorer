@@ -4,6 +4,8 @@ import { sql } from "drizzle-orm";
 import { eq } from "drizzle-orm";
 import { files } from "../../db/schema";
 export const resourceRepository = {
+    
+    // get all root folders
     getRootResources: async () => {
         return await db.query.files.findMany({
             where: (files, { eq }) => eq(files.type, 'folder') && isNull(files.parentId),
@@ -13,6 +15,8 @@ export const resourceRepository = {
 
         });
     },
+
+    // get all children folder by Parent ID
     getChildrenResources: async (parentId: string) => {
         const result = await db.select({
             id: files.id,
@@ -32,6 +36,8 @@ export const resourceRepository = {
 
         return result;
     },
+
+    // search folder by name
     search: async (keyword: string) => {
         return await db.query.files.findMany({
             columns: {
